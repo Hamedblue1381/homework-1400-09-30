@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Hamed malek mohammadi</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body>
+
+  <script>
+    function NumVazir(dastor) {
+      if (dastor < 4) {
+        console.log('Tedad vazir ha az 3 bishtar ast ! ');
+        return;
+      }
+
+      var NumVazir = [];
+      var backTracking = false;
+      rowLoop:
+        for (var row = 0; row < dastor; row++) {
+          if (row < 0) {
+            console.log('in Tedad vazir ghabel hal shodan nist ! ');
+            break;
+          }
+          if (NumVazir[row] === undefined) {
+            NumVazir[row] = [];
+          }
+          for (var col = 0; col < dastor; col++) {
+            if (NumVazir[row][col] === 0) {
+              continue;
+            } else if (backTracking && NumVazir[row][col] == 1) {
+              if (col === dastor - 1) {
+                resetRow(NumVazir, dastor, row);
+                row = row - 2;
+                continue rowLoop;
+              }
+              NumVazir[row][col] = 0;
+              backTracking = false;
+              continue;
+            }
+            NumVazir[row][col] = 1;
+            if (isQueenValid(NumVazir, row, col)) {
+              continue rowLoop;
+            } else if (col == dastor - 1) {
+              backTracking = true;
+              resetRow(NumVazir, dastor, row);
+              row = row - 2;
+              continue rowLoop;
+            } else {
+              NumVazir[row][col] = 0;
+              continue;
+            };
+          }
+        }
+      return NumVazir;
+    }
+
+    function resetRow(NumVazir, dastor, row) {
+      for (var col = 0; col < dastor; col++) {
+        NumVazir[row][col] = undefined;
+      }
+    }
+
+    function isQueenValid(NumVazir, row, col) {
+      for (var i = 0; i < col; i++) {
+        if (NumVazir[row][i] == 1) {
+          return false;
+        }
+      }
+      for (var j = 1; j < row + 1; j++) {
+        if (NumVazir[row - j][col] == 1 || (NumVazir[row - j][col - j] == 1) || (NumVazir[row - j][col + j] == 1)) {
+          return false;
+        }
+      }
+      return true;
+    }
+
+    function printQ(Vazirha) {
+      for (var row = 0; row < Vazirha.length; row++) {
+        var rowText = '';
+        for (var col = 0; col < Vazirha.length; col++) {
+          if (Vazirha[row][col] === undefined) {
+            Vazirha[row][col] = 0;
+          }
+          rowText = rowText + Vazirha[row][col] + ' ';
+        }
+        console.log(rowText);
+      }
+    }
+
+    var Vazirha = NumVazir(8);
+    printQ(Vazirha);
+  </script>
+</body>
+
+</html>
